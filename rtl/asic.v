@@ -17,11 +17,16 @@ module asic(
   ,output [7:0]   OutData      // |>o
 );
 //--------------  参赛选手作答区  ------------------
-reg [7:0] MODE_REG;
-wire        OutVSYNC_Grey;
-wire        OutHSYNC_Grey;
-wire        OutEN_Grey;
-wire [7:0]  OutData_Grey ;
+reg [7:0]   MODE_REG;
+wire        OutVSYNC_Gray   ;
+wire        OutHSYNC_Gray   ;
+wire        OutEN_Gray      ;
+wire [7:0]  OutData_Gray    ;
+
+wire        OutVSYNC_HSV    ;
+wire        OutHSYNC_HSV    ;
+wire        OutEN_HSV       ;
+wire [7:0]  OutData_HSV     ;
 
 
 //MODE_REG
@@ -45,11 +50,17 @@ always@(*) begin
             OutData = InData;
         end 
         2'b01: begin //灰度化
-            OutVSYNC = OutVSYNC_Grey  ;
-            OutHSYNC = OutHSYNC_Grey  ;
-            OutEN   = OutEN_Grey      ;
-            OutData = OutData_Grey    ;            
+            OutVSYNC = OutVSYNC_Gray  ;
+            OutHSYNC = OutHSYNC_Gray  ;
+            OutEN   =  OutEN_Gray     ;
+            OutData =  OutData_Gray   ;            
         end
+        2'b10: begin //HSV
+            OutVSYNC = OutVSYNC_HSV  ;
+            OutHSYNC = OutHSYNC_HSV  ;
+            OutEN   =  OutEN_HSV     ;
+            OutData =  OutData_HSV   ;            
+        end        
         default: begin //默认不处理
             OutVSYNC = InVSYNC;
             OutHSYNC = InHSYNC;
@@ -63,7 +74,7 @@ end
 
 
 //灰度化
-Grey_scale Grey_scale_inst(
+gray_scale gray_scale_inst(
         .clk_sys    (clk_sys  ),
         .reset_sys  (reset_sys),
         .InVSYNC    (InVSYNC  ),
@@ -71,13 +82,25 @@ Grey_scale Grey_scale_inst(
         .InEN       (InEN     ),
         .InData     (InData   ),
     
-        .OutVSYNC   (OutVSYNC_Grey),
-        .OutHSYNC   (OutHSYNC_Grey),
-        .OutEN      (OutEN_Grey   ),
-        .OutData    (OutData_Grey )
+        .OutVSYNC   (OutVSYNC_Gray),
+        .OutHSYNC   (OutHSYNC_Gray),
+        .OutEN      (OutEN_Gray   ),
+        .OutData    (OutData_Gray )
 	);
-
-
-
+    
+//RGB转HSV
+    rgb2hsv rgb2hsv_inst(
+        .clk_sys    (clk_sys      ),
+        .reset_sys  (reset_sys    ),
+        .InVSYNC    (InVSYNC      ),
+        .InHSYNC    (InHSYNC      ),
+        .InEN       (InEN         ),
+        .InData     (InData       ),
+                     
+        .OutVSYNC   (OutVSYNC_HSV ),
+        .OutHSYNC   (OutHSYNC_HSV ),
+        .OutEN      (OutEN_HSV    ),
+        .Outdata    (Outdata_HSV  )
+    );
 //---------------  作答区分割线  -------------------
 endmodule

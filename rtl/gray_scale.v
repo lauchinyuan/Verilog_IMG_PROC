@@ -1,4 +1,4 @@
-module Grey_scale(
+module gray_scale(
 	input wire          clk_sys ,
 	input wire          reset_sys,
 	input wire          InVSYNC,
@@ -13,9 +13,9 @@ module Grey_scale(
 
 	);
 
-parameter R_P = 8'b01001100 ;
-parameter G_P = 8'b10010111 ;
-parameter B_P = 8'b00011100 ;
+parameter R_P = 16'b0000_0000_0100_1100 ;
+parameter G_P = 16'b0000_0000_1001_0111 ;
+parameter B_P = 16'b0000_0000_0001_1100 ;
 
 reg [7:0] r;
 reg [7:0] g;
@@ -37,10 +37,10 @@ always@(posedge clk_sys or negedge reset_sys) begin
 end
 
 //r*0.3
-MUL U0(
-.a 			(r),
-.b 			(R_P),
-.Data_out 	(r_out)
+mult_16_8 U0(
+.a_16b 			(R_P),
+.b_8b 			(r),
+.c 	            (r_out)
 );
 
 always@(posedge clk_sys or negedge reset_sys)begin
@@ -55,10 +55,10 @@ end
 
 //g*0.59
 
-MUL U1(
-.a 			(g),
-.b 			(G_P),
-.Data_out 	(g_out)
+mult_16_8 U1(
+.a_16b 			(G_P),
+.b_8b 			(g  ),
+.c 	            (g_out)
 );
 
 always@(posedge clk_sys or negedge reset_sys)begin
@@ -72,17 +72,17 @@ end
 
 //b*0.11
 
-MUL U2(
-.a 			(InData),
-.b 			(B_P),
-.Data_out 	(b_out)
+mult_16_8 U2(
+.a_16b 			(B_P),
+.b_8b 			(InData),
+.c 	            (b_out)
 );
 
 always@(posedge clk_sys or negedge reset_sys)begin
 	if(!reset_sys)
 		OutData <= 'd0;
 	else if(cnt == 'd2)
-		OutData <= r_out[23:16]+g_out[23:16]+b_out[23:16];
+		OutData <= r_out[15:8]+g_out[15:8]+b_out[15:8];
 	else 
 		OutData <= OutData ;	
 end

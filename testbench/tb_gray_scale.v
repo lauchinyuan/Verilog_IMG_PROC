@@ -1,24 +1,16 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
+// Author: lauchinyuan
+// Email: lauchinyuan@yeah.net
 // Create Date: 2023/07/21 21:57:11
 // Design Name: 
-// Module Name: tb_Grey_scale
+// Module Name: tb_gray_scale
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+// Description: testbench for gray_scale module
 //////////////////////////////////////////////////////////////////////////////////
-module tb_Grey_scale(
+module tb_gray_scale(
 
     );
     
@@ -132,7 +124,7 @@ module tb_Grey_scale(
         $readmemh("C:/Users/Lau Chinyuan/Desktop/mem/rgb_large.mem",mem);
     end
 
-    Grey_scale Grey_scale_inst(
+    gray_scale gray_scale_inst(
 	   .clk_sys     (clk_sys  ),
 	   .reset_sys   (reset_sys),
 	   .InVSYNC     (InVSYNC  ),
