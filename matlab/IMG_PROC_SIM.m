@@ -38,7 +38,6 @@ for i = 1:3:length(mem)
     end
     hsv(i+2) = rgb_max;
 end
-
 %% 将MATLAB处理后的数据写入mem文件
 %灰度变换
 fid = fopen("C:/Users/Lau Chinyuan/Desktop/mem/matlab_gary_result_large.mem",'w');
@@ -68,4 +67,26 @@ hsv_error_ave = mean(hsv_error);    %hsv变换误差的平均值
 %err_ind = find(abs(hsv_error) > 50); %查找出错的索引
 %err_array = hsv_error(err_ind);    %出错的值
 %err_table = [err_ind,err_array];   %排成两列构成错误表
+
+%% 图像显示
+mem_r = mem(1:3:end);  % 图像文件r分量
+mem_g = mem(2:3:end);  % 图像文件g分量
+mem_b = mem(3:3:end);  % 图像文件b分量
+% 图像像素矩阵大小调整
+img_r = reshape(mem_r,132,200);
+img_g = reshape(mem_g,132,200);
+img_b = reshape(mem_b,132,200);
+img_rgb = zeros(132,200,3);    %整合成三原色图像
+img_rgb(:,:,1) = img_r;
+img_rgb(:,:,2) = img_g;
+img_rgb(:,:,3) = img_b;
+img_rgb = img_rgb./255;
+figure,imshow(img_rgb),title("原始RGB图像");
+
+% 灰度图像
+gray_img = reshape(gray_r,132,200);
+gray_img = gray_img./255;
+figure,imshow(gray_img),title("ASIC处理后的灰度图像");
+
+
 
